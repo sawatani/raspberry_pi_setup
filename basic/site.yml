@@ -1,0 +1,27 @@
+- hosts: all
+  tasks:
+  - name: Use vi as a default editor
+    become: yes
+    lineinfile:
+      dest: "/etc/bash.bashrc"
+      state: "present"
+      regexp: "EDITOR="
+      line: "export EDITOR=vi"
+
+  - name: Define ll
+    become: yes
+    lineinfile:
+      dest: "/etc/bash.bashrc"
+      state: "present"
+      regexp: "alias ll="
+      line: "alias ll='ls -la'"
+
+  - name: modify bashrc
+    blockinfile:
+      path: "{{ ansible_env.HOME }}/.bashrc"
+      block: "{{ lookup('file', './files/bashrc') }}"
+
+  - name: copy tmux.conf
+    copy:
+      src: tmux.conf
+      dest: "{{ ansible_env.HOME }}/.tmux.conf"

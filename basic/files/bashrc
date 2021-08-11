@@ -1,0 +1,6 @@
+export PROMPT_COMMAND='history -a; echo'
+if [[ -n "$PS1" ]] && [[ -z "$TMUX" ]] && [[ -n "$SSH_CONNECTION" ]]
+then
+  tmux new-session -A -s ${LC_TMUX_SNAME:-normal}
+fi
+export PS1='\[\e[35m\]\u@\h\[\033[00m\][\D{%Y/%m/%d %H:%M:%S}]:\[\e[36m\]\w\[\033[00m\]\n\$ '

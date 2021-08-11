@@ -1,0 +1,8 @@
+[servers]
+raspberry_pi_4
+
+[servers:vars]
+ansible_connection=ssh
+ansible_user=pi
+ansible_ssh_pass=raspberry
+target_user=kunio

@@ -1,0 +1,27 @@
+- hosts: all
+  tasks:
+  - name: Create user
+    become: yes
+    user:
+      name: "{{ target_user }}"
+      group: "sudo"
+
+  - name: "Allow admin users to sudo without a pasword"
+    become: yes
+    lineinfile:
+      dest: "/etc/sudoers"
+      state: "present"
+      regexp: "^%sudo"
+      line: "%sudo ALL=(ALL:ALL) NOPASSWD: ALL"
+
+  - name: Add authorized key
+    become: yes
+    authorized_key:
+      user: "{{ target_user }}"
+      key: "{{ lookup('file', './files/' + target_user + '-id_rsa.pub') }}"
+
+  - name: "Change default password"
+    become: yes
+    user:
+      name: "{{ ansible_ssh_user }}"
+      password: "{{ lookup('password', '/dev/null') | password_hash('sha512') }}"
