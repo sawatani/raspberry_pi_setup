@@ -25,3 +25,53 @@
     copy:
       src: tmux.conf
       dest: "{{ ansible_env.HOME }}/.tmux.conf"
+
+  - name: Install apt packages
+    become: yes
+    apt:
+      update_cache: yes
+      state: latest
+      name:
+        - git
+        - git-flow
+        - tmux
+        - python3-pip
+        - emacs-nox
+        - ispell
+
+  - name: Install pip packages
+    pip:
+      executable: pip3
+      state: latest
+      name:
+        - 'python-language-server[all]'
+        - pyls-isort
+        - pyls-mypy
+        - pyls-black
+        - pyls-memestra
+        - autoflake
+        - importmagic
+        - epc
+        - flake8-black
+        - flake8-isort
+        - pylint
+        - pigpio
+
+  - name: Install spacemacs
+    git:
+      repo: https://github.com/syl20bnr/spacemacs
+      dest: "{{ ansible_env.HOME }}/.emacs.d"
+      version: develop
+
+  - block:
+    - name: Set python3 as a default
+      file:
+        state: link
+        src: /usr/bin/python3
+        dest: /usr/bin/python
+    - name: Set pip3 as a default
+      file:
+        state: link
+        src: /usr/bin/pip3
+        dest: /usr/bin/pip
+    become: yes
