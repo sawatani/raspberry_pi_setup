@@ -5,6 +5,14 @@
     hostname:
       name: "{{ inventory_hostname_short }}"
 
+  - name: Set localhost
+    become: yes
+    lineinfile:
+      dest: "/etc/hosts"
+      state: "present"
+      regexp: "^127.0.0.1 +localhost"
+      line: "127.0.0.1    localhost {{ inventory_hostname_short }}"
+
   - name: Use vi as a default editor
     become: yes
     lineinfile:
