@@ -1,6 +1,6 @@
 [servers]
-raspberry_pi_3
-raspberry_pi_4
+raspberrypi-3
+raspberrypi-4
 
 [servers:vars]
 ansible_user=kunio

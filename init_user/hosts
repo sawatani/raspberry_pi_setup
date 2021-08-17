@@ -1,5 +1,5 @@
 [servers]
-raspberry_pi_4
+raspberrypi-4
 
 [servers:vars]
 ansible_connection=ssh

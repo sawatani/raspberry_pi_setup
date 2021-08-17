@@ -1,5 +1,10 @@
 - hosts: all
   tasks:
+  - name: Set hostname
+    become: yes
+    hostname:
+      name: "{{ inventory_hostname_short }}"
+
   - name: Use vi as a default editor
     become: yes
     lineinfile:
