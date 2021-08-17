@@ -39,6 +39,12 @@
       src: tmux.conf
       dest: "{{ ansible_env.HOME }}/.tmux.conf"
 
+  - name: apt upgrade
+    become: yes
+    apt:
+      update_cache: yes
+      upgrade: dist
+
   - name: Install apt packages
     become: yes
     apt:
@@ -48,9 +54,15 @@
         - git
         - git-flow
         - tmux
-        - python3-pip
         - emacs-nox
         - ispell
+        - python-dev
+        - python3-dev
+        - python3-pip
+        - python-smbus
+        - i2c-tools
+        - libi2c-dev
+        - pigpio
 
   - name: Install pip packages
     pip:
@@ -70,6 +82,18 @@
         - pylint
         - pigpio
 
+  - name: Enable I2C
+    become: yes
+    command: "raspi-config nonint do_i2c 0"
+
+  - name: Enable SPI
+    become: yes
+    command: "raspi-config nonint do_spi 0"
+
+  - name: Enable pigpiod
+    become: yes
+    command: "systemctl enable pigpiod"
+
   - name: Install spacemacs
     git:
       repo: https://github.com/syl20bnr/spacemacs
@@ -88,3 +112,7 @@
         src: /usr/bin/pip3
         dest: /usr/bin/pip
     become: yes
+
+  - name: reboot
+    become: yes
+    reboot:
